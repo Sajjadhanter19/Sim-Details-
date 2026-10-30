@@ -15,252 +15,336 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      overflow-x: hidden;
     }
 
-    /* Animated background particles */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: 
-        radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
+    .box {
       width: 100%;
-      max-width: 540px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-      border-radius: 24px;
+      max-width: 440px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 22px;
       padding: 36px 30px;
-      box-shadow: 
-        0 25px 50px -12px rgba(0,0,0,0.6),
-        0 0 0 1px rgba(56, 189, 248, 0.05),
-        inset 0 1px 0 rgba(255,255,255,0.04);
-      backdrop-filter: blur(16px);
-      animation: containerIn 0.6s ease;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.55);
     }
 
-    @keyframes containerIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
+    .box.wide { max-width: 560px; }
 
-    /* Stylish Brand Name */
     .brand {
       text-align: center;
       font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: 3px;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
       margin-bottom: 8px;
-      background: linear-gradient(90deg, #38bdf8, #a78bfa, #f472b6, #38bdf8);
-      background-size: 300% 100%;
+      background: linear-gradient(90deg, #38bdf8, #a78bfa, #f472b6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradientMove 4s ease infinite;
-      text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     h1 {
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.4rem;
       margin-bottom: 6px;
       color: #f1f5f9;
     }
 
-    .subtitle { 
-      text-align: center; 
-      font-size: 0.82rem; 
-      color: #64748b; 
-      margin-bottom: 28px; 
+    .sub {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 26px;
     }
 
-    .input-group { 
-      display: flex; 
-      gap: 10px; 
-      margin-bottom: 24px; 
+    .group { margin-bottom: 16px; }
+
+    .group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
     }
 
     input {
-      flex: 1; 
-      padding: 15px 18px; 
-      border-radius: 14px;
-      border: 1px solid #334155; 
-      background: #1e293b; 
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: #1e293b;
       color: #f1f5f9;
-      font-size: 1rem; 
+      font-size: 1rem;
       outline: none;
-      transition: all 0.25s ease;
     }
 
-    input:focus { 
-      border-color: #38bdf8; 
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    input:focus { border-color: #38bdf8; }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
     }
+
+    .row input { flex: 1; }
 
     button {
-      padding: 15px 24px; 
-      border-radius: 14px; 
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
       border: none;
       background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: white; 
-      font-weight: 600; 
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
-    }
-
-    button:active { transform: translateY(0); }
-    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-
-    .result { display: none; animation: fadeIn 0.4s ease; }
-    .result.show { display: block; }
-
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(10px); } 
-      to { opacity: 1; transform: none; } 
-    }
-    
-    .record-box {
-      background: linear-gradient(145deg, #1e293b, #1a2332);
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 16px;
-      border: 1px solid #334155;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .record-box:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
-
-    .record-title {
-      font-size: 0.78rem;
-      color: #38bdf8;
+      color: white;
       font-weight: 600;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #334155;
-      letter-spacing: 0.5px;
+      font-size: 1rem;
+      cursor: pointer;
     }
 
-    .card {
+    button:hover { opacity: 0.92; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-sm {
+      width: auto;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+    }
+
+    .err {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .err.show { display: block; }
+
+    .top {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.45);
+      align-items: center;
+      margin-bottom: 18px;
     }
-    .card:last-child { border-bottom: none; }
-    .card-label { font-size: 0.8rem; color: #94a3b8; min-width: 80px; }
-    .card-value { font-size: 0.95rem; font-weight: 500; color: #f8fafc; text-align: right; word-break: break-word; }
-    
-    .error-box {
-      background: rgba(239, 68, 68, 0.1); 
+
+    .logout {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
       border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #fca5a5; 
-      padding: 18px; 
-      border-radius: 14px; 
-      text-align: center; 
-      font-size: 0.95rem;
+      width: auto;
+      padding: 8px 14px;
+      font-size: 0.8rem;
     }
 
-    .success-header { text-align: center; margin-bottom: 20px; }
-    .status {
-      display: inline-block; 
-      background: rgba(34, 197, 94, 0.12); 
-      color: #4ade80;
-      font-size: 0.8rem; 
-      font-weight: 600; 
-      padding: 6px 16px; 
-      border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.2);
-    }
-    .count-text { margin-top: 8px; font-size: 0.8rem; color: #94a3b8; }
-    
-    .loading { text-align: center; padding: 30px 0; color: #94a3b8; display: none; }
-    .loading.show { display: block; }
-
-    .spinner {
-      width: 36px; height: 36px; 
-      border: 3px solid #334155; 
-      border-top-color: #38bdf8;
-      border-radius: 50%; 
-      margin: 0 auto 14px; 
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .footer { 
-      text-align: center; 
-      margin-top: 28px; 
-      font-size: 0.82rem; 
-      color: #64748b; 
-      border-top: 1px solid rgba(51, 65, 85, 0.5);
-      padding-top: 18px;
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: #64748b;
+      border-top: 1px solid #1e293b;
+      padding-top: 16px;
     }
 
-    .footer strong {
+    .footer b {
       background: linear-gradient(90deg, #38bdf8, #a78bfa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight: 700;
-      letter-spacing: 1px;
     }
+
+    /* ===== CLEAN RECORD CARDS ===== */
+    .record {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      border: 1px solid #334155;
+    }
+
+    .record-title {
+      font-size: 0.8rem;
+      color: #38bdf8;
+      font-weight: 600;
+      margin-bottom: 14px;
+      letter-spacing: 0.3px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field:last-child { margin-bottom: 0; }
+
+    .field-label {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 3px;
+    }
+
+    .field-value {
+      font-size: 1rem;
+      color: #f8fafc;
+      font-weight: 500;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .ok {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .ok span {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .ok small {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 24px 0;
+      color: #94a3b8;
+      display: none;
+    }
+    .loading.show { display: block; }
+
+    .spin {
+      width: 32px; height: 32px;
+      border: 3px solid #334155;
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      animation: s 0.7s linear infinite;
+    }
+    @keyframes s { to { transform: rotate(360deg); } }
+
+    .hide { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="brand">Sajjad Baloch</div>
-    <h1>SIM & CNIC Lookup</h1>
-    <p class="subtitle">Pakistan Mobile Number & CNIC Owner Details</p>
 
-    <div class="input-group">
-      <input type="text" id="number" placeholder="Mobile Number or CNIC">
-      <button id="searchBtn" onclick="search()">Search</button>
+  <!-- LOGIN -->
+  <div class="box" id="loginBox">
+    <div class="brand">Sajjad Baloch</div>
+    <h1>Welcome Back</h1>
+    <p class="sub">Login to access SIM & CNIC Lookup</p>
+
+    <div class="err" id="errMsg">Username ya Password galat hai</div>
+
+    <div class="group">
+      <label>Username</label>
+      <input type="text" id="user" placeholder="Username" autocomplete="off">
     </div>
 
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
+    <div class="group">
+      <label>Password</label>
+      <input type="password" id="pass" placeholder="Password" autocomplete="off">
+    </div>
+
+    <button type="button" id="loginBtn">Login</button>
+
+    <div class="footer">Developed by <b>Sajjad Baloch</b></div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="box wide hide" id="appBox">
+    <div class="top">
+      <div class="brand" style="margin:0;font-size:1rem;">Sajjad Baloch</div>
+      <button type="button" class="logout" id="logoutBtn">Logout</button>
+    </div>
+
+    <h1>SIM & CNIC Lookup</h1>
+    <p class="sub">Pakistan Mobile Number & CNIC Owner Details</p>
+
+    <div class="row">
+      <input type="text" id="num" placeholder="Mobile Number or CNIC">
+      <button type="button" class="btn-sm" id="searchBtn">Search</button>
+    </div>
+
+    <div class="loading" id="load">
+      <div class="spin"></div>
       <div>Searching...</div>
     </div>
 
-    <div class="result" id="result"></div>
+    <div id="out"></div>
 
-    <div class="footer">
-      Developed by <strong>Sajjad Baloch</strong>
-    </div>
+    <div class="footer">Developed by <b>Sajjad Baloch</b></div>
   </div>
 
   <script>
-    const PROXY = "https://corx.envx.cn/fetch?corx-key=corx_wurhkSx9Z5GkXBs85bu8iyqJ-963qATW&url=";
-    const API = "http://wasifali.biz.id/public_apis/sim-info-api.php?search=";
+    // ========== CREDENTIALS ==========
+    const USER = "admin";
+    const PASS = "sajjad123";
+    // =================================
 
-    async function search() {
-      const number = document.getElementById("number").value.trim();
-      const btn = document.getElementById("searchBtn");
-      const loading = document.getElementById("loading");
-      const result = document.getElementById("result");
+    const loginBox = document.getElementById("loginBox");
+    const appBox   = document.getElementById("appBox");
+    const errMsg   = document.getElementById("errMsg");
+
+    document.getElementById("loginBtn").onclick = function () {
+      const u = document.getElementById("user").value.trim();
+      const p = document.getElementById("pass").value.trim();
+
+      if (u === USER && p === PASS) {
+        errMsg.classList.remove("show");
+        loginBox.classList.add("hide");
+        appBox.classList.remove("hide");
+        try { localStorage.setItem("sajjad_ok", "1"); } catch(e) {}
+      } else {
+        errMsg.classList.add("show");
+      }
+    };
+
+    document.getElementById("logoutBtn").onclick = function () {
+      appBox.classList.add("hide");
+      loginBox.classList.remove("hide");
+      document.getElementById("user").value = "";
+      document.getElementById("pass").value = "";
+      document.getElementById("out").innerHTML = "";
+      errMsg.classList.remove("show");
+      try { localStorage.removeItem("sajjad_ok"); } catch(e) {}
+    };
+
+    try {
+      if (localStorage.getItem("sajjad_ok") === "1") {
+        loginBox.classList.add("hide");
+        appBox.classList.remove("hide");
+      }
+    } catch(e) {}
+
+    document.getElementById("pass").onkeypress = function(e) {
+      if (e.key === "Enter") document.getElementById("loginBtn").click();
+    };
+    document.getElementById("user").onkeypress = function(e) {
+      if (e.key === "Enter") document.getElementById("pass").focus();
+    };
+
+    // ========== SEARCH ==========
+    const PROXY = "https://corx.envx.cn/fetch?corx-key=corx_wurhkSx9Z5GkXBs85bu8iyqJ-963qATW&url=";
+    const API   = "http://wasifali.biz.id/public_apis/sim-info-api.php?search=";
+
+    document.getElementById("searchBtn").onclick = doSearch;
+    document.getElementById("num").onkeypress = function(e) {
+      if (e.key === "Enter") doSearch();
+    };
+
+    async function doSearch() {
+      const number = document.getElementById("num").value.trim();
+      const btn    = document.getElementById("searchBtn");
+      const load   = document.getElementById("load");
+      const out    = document.getElementById("out");
 
       if (!number || number.length < 10) {
         alert("Please enter valid Mobile Number or CNIC");
@@ -268,93 +352,76 @@
       }
 
       btn.disabled = true;
-      loading.classList.add("show");
-      result.classList.remove("show");
-      result.innerHTML = "";
-
-      const target = API + encodeURIComponent(number);
-      const finalUrl = PROXY + encodeURIComponent(target);
+      load.classList.add("show");
+      out.innerHTML = "";
 
       try {
-        const res = await fetch(finalUrl);
-        const text = await res.text();
-        let data = JSON.parse(text);
+        const url = PROXY + encodeURIComponent(API + encodeURIComponent(number));
+        const res = await fetch(url);
+        const data = await res.json();
 
-        loading.classList.remove("show");
-        result.classList.add("show");
+        load.classList.remove("show");
 
         if (!data.success || data.error === "NO_RECORD_FOUND") {
-          result.innerHTML = `
-            <div class="error-box">
-              <strong>${data.error || "No Record"}</strong><br>
-              ${data.message || "Is number / CNIC ka koi data nahi mila"}
-            </div>
-          `;
+          out.innerHTML = `<div class="err show">
+            <strong>${data.error || "No Record"}</strong><br>
+            ${data.message || "Data nahi mila"}
+          </div>`;
+          btn.disabled = false;
           return;
         }
 
         const records = data.records || [];
-        
-        if (records.length === 0) {
-          result.innerHTML = `<div class="error-box">Record found but empty data</div>`;
+        if (!records.length) {
+          out.innerHTML = `<div class="err show">Empty data</div>`;
+          btn.disabled = false;
           return;
         }
 
-        let html = `
-          <div class="success-header">
-            <div class="status">✓ Record Found</div>
-            <div class="count-text">${data.count || records.length} record(s) milay</div>
-          </div>
-        `;
+        let html = `<div class="ok">
+          <span>✓ Record Found</span>
+          <small>${data.count || records.length} record(s) milay</small>
+        </div>`;
 
-        records.forEach((rec, index) => {
-          html += `<div class="record-box">`;
-          html += `<div class="record-title">Record #${index + 1}</div>`;
-          
-          const order = ["name", "mobile", "cnic", "address", "network"];
-          const shown = new Set();
+        const order = ["name", "mobile", "cnic", "address", "network"];
 
-          order.forEach(key => {
-            if (rec[key] != null && rec[key] !== "") {
-              html += makeCard(key, rec[key]);
-              shown.add(key);
+        records.forEach((r, i) => {
+          html += `<div class="record">
+            <div class="record-title">Record #${i + 1}</div>`;
+
+          // Preferred fields first
+          order.forEach(k => {
+            if (r[k] !== undefined && r[k] !== null && r[k] !== "") {
+              html += `
+                <div class="field">
+                  <div class="field-label">${k}</div>
+                  <div class="field-value">${escapeHtml(String(r[k]))}</div>
+                </div>`;
             }
           });
 
-          for (const [key, value] of Object.entries(rec)) {
-            if (shown.has(key)) continue;
-            if (value == null || value === "") continue;
-            html += makeCard(key, value);
+          // Extra fields
+          for (let k in r) {
+            if (order.includes(k)) continue;
+            if (r[k] === undefined || r[k] === null || r[k] === "") continue;
+            html += `
+              <div class="field">
+                <div class="field-label">${k}</div>
+                <div class="field-value">${escapeHtml(String(r[k]))}</div>
+              </div>`;
           }
 
           html += `</div>`;
         });
 
-        result.innerHTML = html;
+        out.innerHTML = html;
 
-      } catch (err) {
-        loading.classList.remove("show");
-        result.classList.add("show");
-        result.innerHTML = `
-          <div class="error-box">
-            <strong>Error</strong><br>
-            ${err.message}
-          </div>
-        `;
-        console.error(err);
+      } catch (e) {
+        load.classList.remove("show");
+        out.innerHTML = `<div class="err show"><strong>Error</strong><br>${e.message}</div>`;
       }
 
       btn.disabled = false;
-    }
-
-    function makeCard(label, value) {
-      const nice = label.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-      return `
-        <div class="card">
-          <div class="card-label">${nice}</div>
-          <div class="card-value">${escapeHtml(String(value))}</div>
-        </div>
-      `;
     }
 
     function escapeHtml(text) {
@@ -362,10 +429,6 @@
       d.textContent = text;
       return d.innerHTML;
     }
-
-    document.getElementById("number").addEventListener("keypress", e => {
-      if (e.key === "Enter") search();
-    });
   </script>
 </body>
 </html>
