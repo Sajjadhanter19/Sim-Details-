@@ -1,560 +1,328 @@
-<!DOCTYPE html>
-<html lang="en">
+!DOCTYPE html>
+<html lang="ur">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sajjad Baloch | SIM & CNIC Lookup</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sajjad Baloch Finder</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0b1120, #1a2332, #0f172a);
-      color: #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .box {
-      width: 100%;
-      max-width: 440px;
-      background: rgba(15, 23, 42, 0.93);
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      border-radius: 22px;
-      padding: 32px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.55);
-    }
-    .box.wide { max-width: 600px; }
-    .brand {
-      text-align: center;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      background: linear-gradient(90deg, #38bdf8, #a78bfa, #f472b6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    h1 { text-align: center; font-size: 1.35rem; margin-bottom: 4px; color: #f1f5f9; }
-    .sub { text-align: center; font-size: 0.8rem; color: #64748b; margin-bottom: 22px; }
-    .group { margin-bottom: 14px; }
-    .group label { display: block; font-size: 0.78rem; color: #94a3b8; margin-bottom: 5px; }
-    input {
-      width: 100%;
-      padding: 13px 15px;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      background: #1e293b;
-      color: #f1f5f9;
-      font-size: 0.95rem;
-      outline: none;
-    }
-    input:focus { border-color: #38bdf8; }
-    .row { display: flex; gap: 10px; margin-bottom: 18px; }
-    .row input { flex: 1; }
-    button {
-      width: 100%;
-      padding: 13px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: white;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-    button:hover { opacity: 0.93; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-sm { width: auto; padding: 13px 16px; font-size: 0.88rem; }
-    .btn-green { background: linear-gradient(135deg, #10b981, #059669); }
-    .err {
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #fca5a5;
-      padding: 12px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.88rem;
-      margin-bottom: 14px;
-      display: none;
-    }
-    .err.show { display: block; }
-    .ok-msg {
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      color: #4ade80;
-      padding: 12px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.88rem;
-      margin-bottom: 14px;
-      display: none;
-    }
-    .ok-msg.show { display: block; }
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .logout {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      width: auto;
-      padding: 7px 12px;
-      font-size: 0.78rem;
-    }
-    .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      background: #1e293b;
-      color: #94a3b8;
-      font-size: 0.85rem;
-      cursor: pointer;
-      text-align: center;
-    }
-    .tab.active {
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: white;
-      border-color: transparent;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 22px;
-      font-size: 0.78rem;
-      color: #64748b;
-      border-top: 1px solid #1e293b;
-      padding-top: 14px;
-    }
-    .footer b {
-      background: linear-gradient(90deg, #38bdf8, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .record {
-      background: #1e293b;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 14px;
-      border: 1px solid #334155;
-    }
-    .record-title { font-size: 0.78rem; color: #38bdf8; font-weight: 600; margin-bottom: 12px; }
-    .field { margin-bottom: 10px; }
-    .field:last-child { margin-bottom: 0; }
-    .field-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
-    .field-value { font-size: 0.95rem; color: #f8fafc; font-weight: 500; word-break: break-word; }
-    .ok { text-align: center; margin-bottom: 16px; }
-    .ok span {
-      display: inline-block;
-      background: rgba(34, 197, 94, 0.12);
-      color: #4ade80;
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 5px 14px;
-      border-radius: 999px;
-    }
-    .ok small { display: block; margin-top: 5px; font-size: 0.75rem; color: #94a3b8; }
-    .loading { text-align: center; padding: 22px 0; color: #94a3b8; display: none; }
-    .loading.show { display: block; }
-    .spin {
-      width: 30px; height: 30px;
-      border: 3px solid #334155;
-      border-top-color: #38bdf8;
-      border-radius: 50%;
-      margin: 0 auto 10px;
-      animation: s 0.7s linear infinite;
-    }
-    @keyframes s { to { transform: rotate(360deg); } }
-    .hide { display: none !important; }
-    .user-list { margin-top: 12px; max-height: 240px; overflow-y: auto; }
-    .user-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 0.88rem;
-    }
-    .user-item span { color: #e2e8f0; }
-    .user-item .role { font-size: 0.7rem; color: #94a3b8; margin-left: 6px; }
-    .user-item button {
-      width: auto;
-      padding: 5px 10px;
-      font-size: 0.75rem;
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-    }
-    .panel-title { font-size: 0.9rem; color: #38bdf8; font-weight: 600; margin-bottom: 12px; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,sans-serif;background:#070b14;color:#e8f0ff;min-height:100vh}
+    .wrap{max-width:900px;margin:0 auto;padding:20px 16px 40px}
+    .hidden{display:none!important}
+    .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .login-box{width:100%;max-width:380px;background:#0f1629;border:1px solid rgba(0,229,255,.2);border-radius:18px;padding:28px}
+    .login-box h1{text-align:center;font-size:1.4rem;margin-bottom:6px}
+    .login-box .sub{text-align:center;color:#8b9bb8;font-size:.85rem;margin-bottom:22px}
+    .login-box label{display:block;font-size:.8rem;color:#8b9bb8;margin-bottom:6px}
+    .login-box input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(0,229,255,.2);background:#0a101f;color:#fff;font-size:1rem;margin-bottom:14px;outline:none}
+    .login-box button{width:100%;padding:13px;border:none;border-radius:10px;font-weight:600;font-size:1rem;cursor:pointer;background:linear-gradient(135deg,#00e5ff,#00b4d8);color:#001018}
+    .login-err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:12px;display:none}
+    header{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,229,255,.15);margin-bottom:22px;flex-wrap:wrap;gap:10px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#00e5ff,#0077ff);display:grid;place-items:center;font-weight:700;color:#000}
+    .logo h1{font-size:1.15rem}
+    .logo span{font-size:.72rem;color:#8b9bb8}
+    .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .user-chip{font-size:.8rem;padding:5px 12px;border-radius:999px;background:rgba(0,229,255,.1);color:#00e5ff;border:1px solid rgba(0,229,255,.25)}
+    .btn-sm{padding:7px 14px;border-radius:8px;border:1px solid rgba(0,229,255,.25);background:transparent;color:#8b9bb8;font-size:.8rem;cursor:pointer}
+    .btn-danger{border-color:rgba(239,68,68,.4);color:#f87171}
+    h2{text-align:center;font-size:1.6rem;margin-bottom:6px}
+    .sub{text-align:center;color:#8b9bb8;margin-bottom:20px;font-size:.9rem}
+    .card{background:#0f1629;border:1px solid rgba(0,229,255,.18);border-radius:16px;padding:18px;margin-bottom:18px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .field{flex:1;min-width:140px;padding:12px 14px;border-radius:10px;border:1px solid rgba(0,229,255,.2);background:#0a101f;color:#fff;font-size:.95rem;font-family:monospace;outline:none}
+    .btn-go{padding:12px 18px;border-radius:10px;border:none;font-weight:600;background:linear-gradient(135deg,#00e5ff,#00b4d8);color:#001018;cursor:pointer}
+    .btn-go:disabled{opacity:.5}
+    .loading{text-align:center;padding:28px;color:#8b9bb8}
+    .err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:12px 14px;border-radius:10px}
+    .result{background:#0f1629;border:1px solid rgba(0,229,255,.18);border-radius:14px;overflow:hidden;margin-bottom:14px}
+    .result-top{padding:14px 16px;border-bottom:1px solid rgba(0,229,255,.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:linear-gradient(90deg,rgba(0,229,255,.1),transparent)}
+    .result-top h3{font-size:1.1rem}
+    .result-body{padding:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+    .item{background:#0a101f;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.04)}
+    .item label{display:block;font-size:.65rem;color:#8b9bb8;text-transform:uppercase;margin-bottom:3px}
+    .item .v{font-family:monospace;font-size:.88rem;word-break:break-all}
+    .sec{font-size:.72rem;color:#00e5ff;text-transform:uppercase;margin:14px 0 8px;font-weight:600}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    .chip{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.25);color:#00e5ff;padding:5px 10px;border-radius:6px;font-family:monospace;font-size:.82rem}
+    table{width:100%;border-collapse:collapse;font-size:.82rem}
+    th{text-align:left;padding:7px;color:#8b9bb8;border-bottom:1px solid rgba(0,229,255,.15)}
+    td{padding:8px 7px;border-bottom:1px solid rgba(255,255,255,.04);font-family:monospace}
+    footer{margin-top:30px;text-align:center;color:#8b9bb8;font-size:.82rem;padding-top:16px;border-top:1px solid rgba(0,229,255,.12)}
+    footer b{color:#00e5ff}
+    @media(max-width:500px){.row{flex-direction:column}button{width:100%}}
   </style>
 </head>
 <body>
-
-  <!-- LOGIN -->
-  <div class="box" id="loginBox">
-    <div class="brand">Sajjad Baloch</div>
-    <h1>Welcome Back</h1>
-    <p class="sub">Login to access the panel</p>
-    <div class="err" id="errMsg">Username ya Password galat hai</div>
-    <div class="group">
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <h1>Sajjad Baloch Finder</h1>
+      <p class="sub">Login to continue</p>
+      <div class="login-err" id="loginErr"></div>
       <label>Username</label>
-      <input type="text" id="loginUser" placeholder="Username" autocomplete="off">
-    </div>
-    <div class="group">
+      <input type="text" id="loginUser" placeholder="Username" />
       <label>Password</label>
-      <input type="password" id="loginPass" placeholder="Password" autocomplete="off">
+      <input type="password" id="loginPass" placeholder="Password" />
+      <button type="button" id="loginBtn">Login</button>
     </div>
-    <button type="button" id="loginBtn">Login</button>
-    <div class="footer">Developed by <b>Sajjad Baloch</b></div>
   </div>
 
-  <!-- ADMIN PANEL -->
-  <div class="box wide hide" id="adminBox">
-    <div class="top">
-      <div class="brand" style="margin:0;font-size:0.95rem;">Sajjad Baloch</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span style="font-size:0.75rem;color:#94a3b8;" id="adminLabel"></span>
-        <button type="button" class="logout" id="adminLogout">Logout</button>
+  <div id="appScreen" class="wrap hidden">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">SB</div>
+        <div>
+          <h1>Sajjad Baloch Finder</h1>
+          <span>Pak SIM • CNIC • Vehicle</span>
+        </div>
       </div>
+      <div class="header-right">
+        <span class="user-chip" id="currentUserLabel"></span>
+        <button class="btn-sm btn-danger" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <div id="searchView">
+      <h2>Ultimate Number Finder</h2>
+      <p class="sub">Phone / CNIC / Vehicle Number se talash karein</p>
+      <div class="card">
+        <div class="row">
+          <input class="field" id="q" type="text" placeholder="0300xxx | 35202xxx | SLK-0004" />
+          <button class="btn-go" id="goBtn" type="button">Search</button>
+        </div>
+      </div>
+      <div id="out"></div>
     </div>
 
-    <div class="tabs">
-      <div class="tab active" id="tabBtnSearch" onclick="showTab('search')">Search</div>
-      <div class="tab" id="tabBtnUsers" onclick="showTab('users')">Manage Users</div>
-    </div>
-
-    <!-- Search -->
-    <div id="panelSearch">
-      <h1 style="font-size:1.2rem;">SIM & CNIC Lookup</h1>
-      <p class="sub">Pakistan Mobile Number & CNIC Owner Details</p>
-      <div class="row">
-        <input type="text" id="numAdmin" placeholder="Mobile Number or CNIC">
-        <button type="button" class="btn-sm" id="btnSearchAdmin">Search</button>
-      </div>
-      <div class="loading" id="loadAdmin"><div class="spin"></div><div>Searching...</div></div>
-      <div id="outAdmin"></div>
-    </div>
-
-    <!-- Users -->
-    <div id="panelUsers" class="hide">
-      <div class="panel-title">Create New User</div>
-      <div class="err" id="addErr"></div>
-      <div class="ok-msg" id="addOk"></div>
-
-      <div class="group">
-        <label>Username</label>
-        <input type="text" id="newUsername" placeholder="New username">
-      </div>
-      <div class="group">
-        <label>Password</label>
-        <input type="text" id="newPassword" placeholder="New password">
-      </div>
-      <button type="button" class="btn-green" id="btnAddUser" style="margin-bottom:18px;">Add User</button>
-
-      <div class="panel-title">All Users</div>
-      <div class="user-list" id="userList"></div>
-    </div>
-
-    <div class="footer">Developed by <b>Sajjad Baloch</b></div>
+    <footer>Developed by <b>Sajjad Baloch</b></footer>
   </div>
 
-  <!-- USER PANEL -->
-  <div class="box wide hide" id="userBox">
-    <div class="top">
-      <div class="brand" style="margin:0;font-size:0.95rem;">Sajjad Baloch</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span style="font-size:0.75rem;color:#94a3b8;" id="userLabel"></span>
-        <button type="button" class="logout" id="userLogout">Logout</button>
-      </div>
-    </div>
-    <h1 style="font-size:1.2rem;">SIM & CNIC Lookup</h1>
-    <p class="sub">Pakistan Mobile Number & CNIC Owner Details</p>
-    <div class="row">
-      <input type="text" id="numUser" placeholder="Mobile Number or CNIC">
-      <button type="button" class="btn-sm" id="btnSearchUser">Search</button>
-    </div>
-    <div class="loading" id="loadUser"><div class="spin"></div><div>Searching...</div></div>
-    <div id="outUser"></div>
-    <div class="footer">Developed by <b>Sajjad Baloch</b></div>
-  </div>
+<script>
+(function(){
+  /* =====================================================
+     LOGIN CREDENTIALS — yahan se change karein
+     ===================================================== */
 
-  <script>
-    const ADMIN_USER = "admin";
-    const ADMIN_PASS = "sajjad123";
-    const PROXY = "https://corx.envx.cn/fetch?corx-key=corx_wurhkSx9Z5GkXBs85bu8iyqJ-963qATW&url=";
-    const API = "http://wasifali.biz.id/public_apis/sim-info-api.php?search=";
+  // Admin
+  var ADMIN_USER = "admin";
+  var ADMIN_PASS = "admin@123";
 
-    // ---------- Users Storage ----------
-    function loadUsers() {
-      try {
-        const raw = localStorage.getItem("sajjad_users_v2");
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        return [];
+  // Users — naya user add karne ke liye nayi line likhein
+  var USERS = [
+    { username: "user1", password: "pass1" },
+    { username: "user2", password: "pass2" },
+    { username: "ali",   password: "ali123" }
+  ];
+
+  /* ===================================================== */
+
+  var API = "https://identra.janialexa610.workers.dev";
+  var KEY = "identra-client-key-2026";
+  var IDLE_MS = 30 * 60 * 1000;
+  var idleTimer = null;
+  var lastActivity = Date.now();
+
+  function getSession(){
+    try { return JSON.parse(localStorage.getItem("sb_session") || "null"); }
+    catch(e){ return null; }
+  }
+  function setSession(obj){
+    if (obj) localStorage.setItem("sb_session", JSON.stringify(obj));
+    else localStorage.removeItem("sb_session");
+  }
+
+  function touchActivity(){
+    lastActivity = Date.now();
+    var s = getSession();
+    if (s) {
+      s.lastActivity = lastActivity;
+      setSession(s);
+    }
+  }
+  function startIdleWatch(){
+    stopIdleWatch();
+    lastActivity = Date.now();
+    idleTimer = setInterval(function(){
+      if (!getSession()) return;
+      if (Date.now() - lastActivity >= IDLE_MS) {
+        stopIdleWatch();
+        setSession(null);
+        showLogin();
+        showErr("30 minute inactive — auto logout. Dobara login karein.");
       }
+    }, 15000);
+  }
+  function stopIdleWatch(){
+    if (idleTimer) { clearInterval(idleTimer); idleTimer = null; }
+  }
+
+  function showErr(msg){
+    var el = document.getElementById("loginErr");
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  function showLogin(){
+    document.getElementById("loginScreen").classList.remove("hidden");
+    document.getElementById("appScreen").classList.add("hidden");
+    document.getElementById("loginErr").style.display = "none";
+    document.getElementById("loginUser").value = "";
+    document.getElementById("loginPass").value = "";
+  }
+
+  function showApp(session){
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("appScreen").classList.remove("hidden");
+    document.getElementById("currentUserLabel").textContent =
+      session.isAdmin ? ("Admin: " + session.username) : ("User: " + session.username);
+    touchActivity();
+    startIdleWatch();
+  }
+
+  function doLogin(){
+    var u = (document.getElementById("loginUser").value || "").trim();
+    var p = document.getElementById("loginPass").value || "";
+    if (!u || !p) { showErr("Username aur Password likhein"); return; }
+
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      setSession({ username: u, isAdmin: true, lastActivity: Date.now() });
+      showApp(getSession());
+      return;
     }
 
-    function saveUsers(list) {
-      try {
-        localStorage.setItem("sajjad_users_v2", JSON.stringify(list));
-        return true;
-      } catch (e) {
-        return false;
+    for (var i = 0; i < USERS.length; i++) {
+      if (USERS[i].username === u && USERS[i].password === p) {
+        setSession({ username: u, isAdmin: false, lastActivity: Date.now() });
+        showApp(getSession());
+        return;
       }
     }
+    showErr("Galat username ya password");
+  }
 
-    // ---------- Login ----------
-    document.getElementById("loginBtn").onclick = function () {
-      const u = document.getElementById("loginUser").value.trim();
-      const p = document.getElementById("loginPass").value.trim();
-      const err = document.getElementById("errMsg");
+  function doLogout(){
+    stopIdleWatch();
+    setSession(null);
+    showLogin();
+  }
 
-      if (u === ADMIN_USER && p === ADMIN_PASS) {
-        err.classList.remove("show");
-        document.getElementById("loginBox").classList.add("hide");
-        document.getElementById("adminBox").classList.remove("hide");
-        document.getElementById("adminLabel").textContent = "Admin: " + u;
-        localStorage.setItem("sajjad_session_v2", JSON.stringify({ role: "admin", user: u }));
-        showTab("search");
-        refreshUserList();
-        return;
+  function salt(){
+    var a = new Uint8Array(16); crypto.getRandomValues(a);
+    var s = ""; for (var i = 0; i < a.length; i++) s += a[i].toString(16).padStart(2, "0");
+    return s + Date.now();
+  }
+  function clean(s){ return (s || "").trim().replace(/\s+/g, ""); }
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function val(v){
+    if (v === null || v === undefined || v === "") return "—";
+    return esc(String(v));
+  }
+
+  function doSearch(raw){
+    var q = clean(raw), outEl = document.getElementById("out");
+    if (!q) { outEl.innerHTML = '<div class="err">Number likhein</div>'; return; }
+    outEl.innerHTML = '<div class="loading">Searching...</div>';
+    document.getElementById("goBtn").disabled = true;
+    fetch(API + "/api/lookup?q=" + encodeURIComponent(q), {
+      method: "GET",
+      headers: { "Accept": "application/json", "x-api-key": KEY, "x-device-salt": salt() }
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data.error) { outEl.innerHTML = '<div class="err">' + esc(data.error) + '</div>'; return; }
+      var html = "";
+      if (data.citizen && data.citizen.success) html += renderCitizen(data);
+      if (data.vehicles && data.vehicles.length) {
+        for (var i = 0; i < data.vehicles.length; i++) html += renderVehicle(data.vehicles[i], i);
+      } else if (data.vehicleNotes && data.vehicleNotes.length) {
+        html += '<div class="result"><div class="result-top"><h3>Vehicle Notes</h3></div><div class="result-body" style="font-size:.88rem;color:#8b9bb8">';
+        for (var n = 0; n < data.vehicleNotes.length; n++) html += "<div>• " + esc(data.vehicleNotes[n]) + "</div>";
+        html += '</div></div>';
       }
+      if (!html) html = '<div class="err">Koi record nahi mila</div>';
+      outEl.innerHTML = html;
+    })
+    .catch(function(e){ outEl.innerHTML = '<div class="err">Error: ' + esc(e.message) + '</div>'; })
+    .finally(function(){ document.getElementById("goBtn").disabled = false; });
+  }
 
-      const users = loadUsers();
-      const found = users.find(function (x) { return x.u === u && x.p === p; });
-      if (found) {
-        err.classList.remove("show");
-        document.getElementById("loginBox").classList.add("hide");
-        document.getElementById("userBox").classList.remove("hide");
-        document.getElementById("userLabel").textContent = "User: " + u;
-        localStorage.setItem("sajjad_session_v2", JSON.stringify({ role: "user", user: u }));
-        return;
-      }
-
-      err.classList.add("show");
-    };
-
-    // Restore session
-    (function () {
-      try {
-        const s = JSON.parse(localStorage.getItem("sajjad_session_v2") || "null");
-        if (!s) return;
-        document.getElementById("loginBox").classList.add("hide");
-        if (s.role === "admin") {
-          document.getElementById("adminBox").classList.remove("hide");
-          document.getElementById("adminLabel").textContent = "Admin: " + s.user;
-          showTab("search");
-          refreshUserList();
-        } else {
-          document.getElementById("userBox").classList.remove("hide");
-          document.getElementById("userLabel").textContent = "User: " + s.user;
-        }
-      } catch (e) {}
-    })();
-
-    function doLogout() {
-      localStorage.removeItem("sajjad_session_v2");
-      document.getElementById("adminBox").classList.add("hide");
-      document.getElementById("userBox").classList.add("hide");
-      document.getElementById("loginBox").classList.remove("hide");
-      document.getElementById("loginUser").value = "";
-      document.getElementById("loginPass").value = "";
-      document.getElementById("errMsg").classList.remove("show");
-      document.getElementById("outAdmin").innerHTML = "";
-      document.getElementById("outUser").innerHTML = "";
+  function renderCitizen(data){
+    var c = data.citizen, numbers = c.numbers || [], sims = c.simRecords || [];
+    var html = '<div class="result"><div class="result-top"><h3>' + esc(c.name || "Unknown") + '</h3></div><div class="result-body"><div class="grid">';
+    html += '<div class="item"><label>CNIC</label><div class="v">' + val(c.cnic) + '</div></div>';
+    html += '<div class="item"><label>Address</label><div class="v">' + val(c.address) + '</div></div>';
+    html += '<div class="item"><label>Numbers</label><div class="v">' + numbers.length + '</div></div></div>';
+    if (numbers.length) {
+      html += '<div class="sec">Registered Numbers</div><div class="chips">';
+      for (var i = 0; i < numbers.length; i++) html += '<span class="chip">' + esc(numbers[i]) + '</span>';
+      html += '</div>';
     }
-    document.getElementById("adminLogout").onclick = doLogout;
-    document.getElementById("userLogout").onclick = doLogout;
-
-    document.getElementById("loginPass").onkeypress = function (e) {
-      if (e.key === "Enter") document.getElementById("loginBtn").click();
-    };
-
-    // ---------- Tabs ----------
-    function showTab(name) {
-      document.getElementById("tabBtnSearch").classList.toggle("active", name === "search");
-      document.getElementById("tabBtnUsers").classList.toggle("active", name === "users");
-      document.getElementById("panelSearch").classList.toggle("hide", name !== "search");
-      document.getElementById("panelUsers").classList.toggle("hide", name !== "users");
-      if (name === "users") refreshUserList();
+    if (sims.length) {
+      html += '<div class="sec">SIM Details</div><div style="overflow-x:auto"><table><thead><tr><th>Mobile</th><th>Name</th><th>CNIC</th><th>Address</th></tr></thead><tbody>';
+      for (var j = 0; j < sims.length; j++) {
+        var s = sims[j];
+        html += '<tr><td>' + val(s.mobile) + '</td><td>' + val(s.name) + '</td><td>' + val(s.cnic) + '</td><td>' + val(s.address) + '</td></tr>';
+      }
+      html += '</tbody></table></div>';
     }
+    return html + '</div></div>';
+  }
 
-    // ---------- Add User (FIXED) ----------
-    document.getElementById("btnAddUser").onclick = function () {
-      const username = document.getElementById("newUsername").value.trim();
-      const password = document.getElementById("newPassword").value.trim();
-      const errBox = document.getElementById("addErr");
-      const okBox  = document.getElementById("addOk");
-
-      errBox.classList.remove("show");
-      okBox.classList.remove("show");
-      errBox.textContent = "";
-      okBox.textContent = "";
-
-      if (!username || !password) {
-        errBox.textContent = "Username aur Password dono zaroori hain";
-        errBox.classList.add("show");
-        return;
-      }
-
-      if (username.toLowerCase() === ADMIN_USER.toLowerCase()) {
-        errBox.textContent = "Admin username use nahi kar sakte";
-        errBox.classList.add("show");
-        return;
-      }
-
-      let users = loadUsers();
-
-      const exists = users.some(function (x) {
-        return x.u.toLowerCase() === username.toLowerCase();
-      });
-
-      if (exists) {
-        errBox.textContent = "Yeh username pehle se maujood hai";
-        errBox.classList.add("show");
-        return;
-      }
-
-      users.push({ u: username, p: password });
-      const saved = saveUsers(users);
-
-      if (!saved) {
-        errBox.textContent = "Save nahi ho saka (localStorage blocked). Browser settings check karein.";
-        errBox.classList.add("show");
-        return;
-      }
-
-      document.getElementById("newUsername").value = "";
-      document.getElementById("newPassword").value = "";
-      okBox.textContent = "✓ User successfully add ho gaya: " + username;
-      okBox.classList.add("show");
-      refreshUserList();
-    };
-
-    // ---------- User List ----------
-    function refreshUserList() {
-      const list = document.getElementById("userList");
-      const users = loadUsers();
-
-      if (!users.length) {
-        list.innerHTML = '<div style="text-align:center;color:#64748b;font-size:0.85rem;padding:14px;">Koi user nahi hai</div>';
-        return;
-      }
-
-      let html = "";
-      for (let i = 0; i < users.length; i++) {
-        html += '<div class="user-item">' +
-          '<div><span>' + escapeHtml(users[i].u) + '</span><span class="role">• user</span></div>' +
-          '<button type="button" data-index="' + i + '" class="rmBtn">Remove</button>' +
-          '</div>';
-      }
-      list.innerHTML = html;
-
-      // Attach remove buttons
-      const btns = list.querySelectorAll(".rmBtn");
-      for (let j = 0; j < btns.length; j++) {
-        btns[j].onclick = function () {
-          const idx = parseInt(this.getAttribute("data-index"), 10);
-          if (!confirm("Is user ko remove karna hai?")) return;
-          let list2 = loadUsers();
-          list2.splice(idx, 1);
-          saveUsers(list2);
-          refreshUserList();
-        };
-      }
+  function renderVehicle(v, index){
+    var fields = [
+      ["Registration No", v.registrationNumber], ["Owner Name", v.ownerName],
+      ["Father Name", v.ownerFathersName], ["Owner CNIC", v.ownerCNIC],
+      ["Owner Address", v.ownerAddress], ["Owner Type", v.ownerType],
+      ["Manufacturer", v.manufacturerName], ["Model", v.modelName],
+      ["Model Year", v.modelYear || v.manufacturingYear], ["Vehicle Type", v.vehicleType],
+      ["Category", v.vehicleCategoryName || v._CATEGORY_], ["Color", v.color],
+      ["Engine No", v.engineNumber], ["Chassis No", v.chassisNumber],
+      ["Engine Capacity", v.engineCapacity ? v.engineCapacity + " CC" : null],
+      ["Fuel Type", v.fuelType], ["Seats", v.numberOfSeats], ["Tyres", v.numberofTyres],
+      ["Province", v.provinceName], ["District", v.districtName],
+      ["Division", v.divisionName], ["Branch", v.branchName],
+      ["CPLC Status", v.cplcStatus], ["Last Tax Paid", v.lastTaxPaid],
+      ["Reg. Updated", v.vehicleRegistrationUpdatedDate], ["Status", v.statusDescription]
+    ];
+    var items = "";
+    for (var i = 0; i < fields.length; i++) {
+      var label = fields[i][0], value = fields[i][1];
+      if (value !== null && value !== undefined && value !== "")
+        items += '<div class="item"><label>' + esc(label) + '</label><div class="v">' + esc(String(value)) + '</div></div>';
     }
+    return '<div class="result"><div class="result-top"><h3>Vehicle ' + esc(v.registrationNumber || ("#" + (index+1))) +
+      '</h3></div><div class="result-body"><div class="grid">' + items + '</div></div></div>';
+  }
 
-    // ---------- Search ----------
-    function doSearch(inputId, loadId, outId, btnId) {
-      const number = document.getElementById(inputId).value.trim();
-      const btn = document.getElementById(btnId);
-      const load = document.getElementById(loadId);
-      const out = document.getElementById(outId);
+  document.getElementById("loginBtn").onclick = doLogin;
+  document.getElementById("loginPass").onkeydown = function(e){ if (e.key === "Enter") doLogin(); };
+  document.getElementById("loginUser").onkeydown = function(e){ if (e.key === "Enter") doLogin(); };
+  document.getElementById("logoutBtn").onclick = doLogout;
+  document.getElementById("goBtn").onclick = function(){ doSearch(document.getElementById("q").value); };
+  document.getElementById("q").onkeydown = function(e){
+    if (e.key === "Enter") doSearch(document.getElementById("q").value);
+  };
 
-      if (!number || number.length < 10) {
-        alert("Please enter valid Mobile Number or CNIC");
-        return;
-      }
+  ["click", "keydown", "touchstart", "mousemove", "scroll"].forEach(function(ev){
+    document.addEventListener(ev, touchActivity, { passive: true });
+  });
 
-      btn.disabled = true;
-      load.classList.add("show");
-      out.innerHTML = "";
-
-      const url = PROXY + encodeURIComponent(API + encodeURIComponent(number));
-
-      fetch(url)
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          load.classList.remove("show");
-
-          if (!data.success || data.error === "NO_RECORD_FOUND") {
-            out.innerHTML = '<div class="err show">' + (data.error || "No Record") + '<br>' + (data.message || "Data nahi mila") + '</div>';
-            btn.disabled = false;
-            return;
-          }
-
-          const records = data.records || [];
-          if (!records.length) {
-            out.innerHTML = '<div class="err show">Empty data</div>';
-            btn.disabled = false;
-            return;
-          }
-
-          let html = '<div class="ok"><span>✓ Record Found</span><small>' + (data.count || records.length) + ' record(s) milay</small></div>';
-          const order = ["name", "mobile", "cnic", "address", "network"];
-
-          for (let i = 0; i < records.length; i++) {
-            const r = records[i];
-            html += '<div class="record"><div class="record-title">Record #' + (i + 1) + '</div>';
-            for (let o = 0; o < order.length; o++) {
-              const k = order[o];
-              if (r[k]) {
-                html += '<div class="field"><div class="field-label">' + k + '</div><div class="field-value">' + escapeHtml(String(r[k])) + '</div></div>';
-              }
-            }
-            for (const k in r) {
-              if (order.indexOf(k) !== -1 || !r[k]) continue;
-              html += '<div class="field"><div class="field-label">' + k + '</div><div class="field-value">' + escapeHtml(String(r[k])) + '</div></div>';
-            }
-            html += '</div>';
-          }
-          out.innerHTML = html;
-          btn.disabled = false;
-        })
-        .catch(function (e) {
-          load.classList.remove("show");
-          out.innerHTML = '<div class="err show"><strong>Error</strong><br>' + e.message + '</div>';
-          btn.disabled = false;
-        });
+  var session = getSession();
+  if (session) {
+    if (session.lastActivity && (Date.now() - session.lastActivity >= IDLE_MS)) {
+      setSession(null);
+      showLogin();
+      showErr("Session expire — dobara login karein.");
+    } else {
+      showApp(session);
     }
-
-    document.getElementById("btnSearchAdmin").onclick = function () {
-      doSearch("numAdmin", "loadAdmin", "outAdmin", "btnSearchAdmin");
-    };
-    document.getElementById("btnSearchUser").onclick = function () {
-      doSearch("numUser", "loadUser", "outUser", "btnSearchUser");
-    };
-    document.getElementById("numAdmin").onkeypress = function (e) {
-      if (e.key === "Enter") document.getElementById("btnSearchAdmin").click();
-    };
-    document.getElementById("numUser").onkeypress = function (e) {
-      if (e.key === "Enter") document.getElementById("btnSearchUser").click();
-    };
-
-    function escapeHtml(t) {
-      const d = document.createElement("div");
-      d.textContent = t;
-      return d.innerHTML;
-    }
-  </script>
+  } else {
+    showLogin();
+  }
+})();
+</script>
 </body>
 </html>
